@@ -23,16 +23,20 @@ int main(int argc,char* argv[]){
 		exit(1);
 		}
 	int i,pid;
+	//cria uma matriz de caracter auxiliar para guardas os argumentos do programa que será executado
 	char **aux;
+	//aloca-se o vetor aux
 	aux = (char**) malloc ((argc-2)*sizeof(char*));
 	for(i=0;i<(argc-2);i++){
 		aux[i] = (char *) malloc (100);
 		aux[i][0] = '\0';
 	}
+	//passa os argvs para o vetor aux
 	strcpy(aux[0],argv[1]);
 	for(i=1;i<(argc-2);i++){
 		strcpy(aux[i],argv[i+2]);
 	}
+	//verifica se foi passado corretamente
 	for(i=0;i<(argc-2);i++){
 		printf("%s \n",aux[i]);
 	}
@@ -40,9 +44,11 @@ int main(int argc,char* argv[]){
 		printf("Erro no fork! \n");
 		exit(1);
 	}
+	//se for o filho executa o programa
 	if(pid == 0){
 		execv(argv[1],aux);
 	}else{
+		//se for o pai manda mensagem na fila sinalizando que um novo processo foi criado
 		char auxmsg[4];
 		msg->mtype = 1;
 		snprintf(auxmsg, 4,"%d",pid);
