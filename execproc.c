@@ -4,8 +4,10 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
+#include <time.h>
  struct msgp{
  	long mtype;
+ 	time_t tempo;
  	char mtext[4];
  };
 
@@ -53,7 +55,8 @@ int main(int argc,char* argv[]){
 		msg->mtype = 1;
 		snprintf(auxmsg, 4,"%d",pid);
 		strcpy(msg->mtext,auxmsg);
-		msgsnd(idfila,msg,4,0);
+		msg->tempo = time(NULL);
+		msgsnd(idfila,msg,sizeof(Buff) - 4,0);
 		printf("Mensagem enviada!\n");
 	}
 	return 0;

@@ -4,10 +4,13 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
+#include <time.h>
  struct msgp{
  	long mtype;
+ 	time_t tempo;
  	char mtext[4];
  };
+
 
 typedef struct msgp Buff;
 int main(){
@@ -21,7 +24,7 @@ int main(){
 	Buff* msg = (Buff*)malloc(sizeof(Buff*));
 	msg->mtype = 9;
 	strcpy(msg->mtext,"KILL");
-	msgsnd(idfila,msg,4,0);
+	msgsnd(idfila,msg,sizeof(Buff) - 4,0);
 	printf("Mensagem de terminar execprocd enviada! \n");
 	return 0;
 }
